@@ -47,14 +47,18 @@ class ApiKeyGenerateCommand extends Command
             throw new \Exception("Une clé d'API existe déjà avec ce nom");
         
         $parser = new Parser();
-        $encoded = $this->option('key') ?? $parser->encode($key);
+        if ($this->option('key')) {
+            $tmp = $this->option('key');
+            $encoded = $parser->encode($tmp, Caesar::shift($tmp));
+        } else
+            $encoded = $parser->encode($key);
         
         // Création de l'entrée dans la base
         ApiKey::create([
             'key'  => $encoded,
             'name' => $name
         ]);
-    
+        
         if (Caesar::shift($key) === null) {
             $shift = explode('.s00', $encoded)[1];
             $key .= ".s00$shift";
