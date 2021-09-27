@@ -38,7 +38,7 @@ class ApiKeyGenerateCommand extends Command
     public function handle()
     {
         /* @var $key String La clé générée par la méthode */
-        $key = trim($this->option('key') ?? $this->getRandomKey());
+        $key = trim($this->getRandomKey());
         
         if (($name = $this->option('name')) === null || !($name = strtolower(str_replace(" ", "-", $name))))
             throw new \Exception("Un nom pour la clé d'API est obligatoire");
@@ -47,7 +47,7 @@ class ApiKeyGenerateCommand extends Command
             throw new \Exception("Une clé d'API existe déjà avec ce nom");
         
         $parser = new Parser();
-        $encoded = $parser->encode($key);
+        $encoded = $this->option('key') ?? $parser->encode($key);
         
         // Création de l'entrée dans la base
         ApiKey::create([
