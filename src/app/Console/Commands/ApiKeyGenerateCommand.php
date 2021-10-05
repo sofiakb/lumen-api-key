@@ -50,6 +50,7 @@ class ApiKeyGenerateCommand extends Command
         if ($this->option('key')) {
             $tmp = $this->option('key');
             $encoded = $parser->encode($tmp, Caesar::shift($tmp));
+            $key = $tmp;
         } else
             $encoded = $parser->encode($key);
         
